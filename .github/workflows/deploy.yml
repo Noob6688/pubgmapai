@@ -30,6 +30,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Create wrangler.toml
+        run: |
+          cat > wrangler.toml << 'EOF'
+          name = "pubg-map"
+          compatibility_date = "2025-01-01"
+          compatibility_flags = ["nodejs_compat"]
+
+          [vars]
+          NEXT_PUBLIC_SUPABASE_URL = { default = "" }
+          NEXT_PUBLIC_SUPABASE_ANON_KEY = { default = "" }
+          NEXT_PUBLIC_R2_DOMAIN = { default = "" }
+
+          [env.production]
+          vars = {}
+
+          [[r2_buckets]]
+          binding = "NEXT_INC_CACHE_R2_BUCKET"
+          bucket_name = "pubgmaptile"
+          EOF
+
       - name: Build and Deploy
         run: |
           pnpm add -D @opennextjs/cloudflare wrangler
