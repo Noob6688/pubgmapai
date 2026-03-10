@@ -114,51 +114,42 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [logoUrlData] = await Promise.all([
+        const [
+          logoUrlData,
+          mapTypesResult,
+          markerTypesResult,
+          mapsResult,
+        ] = await Promise.all([
           fetchSetting(supabase, 'logo_url'),
+          supabase.from('map_types').select('*').eq('is_active', true).order('sort_order'),
+          supabase.from('marker_types').select('*').eq('is_active', true).order('sort_order'),
+          supabase.from('maps').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
         ])
+
         if (logoUrlData) setLogoUrl(logoUrlData)
 
-        const { data: mapTypesData, error: mapTypesError } = await supabase
-          .from('map_types')
-          .select('*')
-          .eq('is_active', true)
-          .order('sort_order')
-
-        if (!mapTypesError && mapTypesData) {
+        const mapTypesData = mapTypesResult.data
+        if (mapTypesData && mapTypesData.length > 0) {
           setMapTypes(mapTypesData)
-          if (mapTypesData.length > 0) {
-            setSelectedMapType(mapTypesData[0])
-            const markerTypeIds = await fetchMarkerTypeIdsByMapType(supabase, mapTypesData[0].id)
-            setAssociatedMarkerTypeIds(markerTypeIds)
-          }
+          setSelectedMapType(mapTypesData[0])
         }
 
-        const { data: markerTypesData, error: markerTypesError } = await supabase
-          .from('marker_types')
-          .select('*')
-          .eq('is_active', true)
-          .order('sort_order')
-
-        if (!markerTypesError && markerTypesData) {
+        const markerTypesData = markerTypesResult.data
+        if (markerTypesData && markerTypesData.length > 0) {
           setAllMarkerTypes(markerTypesData)
-          const firstMarkerType = markerTypesData[0]
-          if (firstMarkerType) {
-            setSelectedMarkerTypeIds([firstMarkerType.id])
-          }
+          setSelectedMarkerTypeIds([markerTypesData[0].id])
         }
 
-        const { data: mapsData, error: mapsError } = await supabase
-          .from('maps')
-          .select('*')
-          .eq('is_active', true)
-          .order('sort_order', { ascending: true })
-
-        if (!mapsError && mapsData) {
+        const mapsData = mapsResult.data
+        if (mapsData && mapsData.length > 0) {
           setMaps(mapsData)
-          if (mapsData.length > 0) {
-            setSelectedMap(mapsData[0])
-          }
+          setSelectedMap(mapsData[0])
+        }
+
+        const firstMapTypeId = mapTypesData?.[0]?.id
+        if (firstMapTypeId) {
+          const markerTypeIds = await fetchMarkerTypeIdsByMapType(supabase, firstMapTypeId)
+          setAssociatedMarkerTypeIds(markerTypeIds)
         }
 
         let recommendationsData: Recommendation[] = []
