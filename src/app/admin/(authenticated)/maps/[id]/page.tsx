@@ -19,6 +19,7 @@ export default function EditMapPage() {
     name: '',
     slug: '',
     tile_url: '',
+    sort_order: 0,
     is_active: true,
   })
 
@@ -43,6 +44,7 @@ export default function EditMapPage() {
         name: data.name,
         slug: data.slug,
         tile_url: data.tile_url,
+        sort_order: data.sort_order || 0,
         is_active: data.is_active,
       })
       setLoading(false)
@@ -64,6 +66,7 @@ export default function EditMapPage() {
           name: formData.name,
           slug: formData.slug,
           tile_url: formData.tile_url,
+          sort_order: formData.sort_order,
           is_active: formData.is_active,
           updated_at: new Date().toISOString(),
         })
@@ -146,6 +149,18 @@ export default function EditMapPage() {
                 onChange={(e) => setFormData({ ...formData, tile_url: e.target.value })}
                 required
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="sort_order">排序</Label>
+              <Input
+                id="sort_order"
+                type="number"
+                value={formData.sort_order}
+                onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
+              />
+              <p className="text-xs text-muted-foreground">
+                数字越小越靠前
+              </p>
             </div>
             <div className="flex items-center gap-2">
               <input

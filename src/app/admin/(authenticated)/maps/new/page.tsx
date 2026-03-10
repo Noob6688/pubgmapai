@@ -17,6 +17,7 @@ export default function NewMapPage() {
     name: '',
     slug: '',
     tile_url: '',
+    sort_order: 0,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,6 +31,7 @@ export default function NewMapPage() {
           name: formData.name,
           slug: formData.slug,
           tile_url: formData.tile_url,
+          sort_order: formData.sort_order,
         }])
 
       if (error) throw error
@@ -83,6 +85,18 @@ export default function NewMapPage() {
               />
               <p className="text-xs text-muted-foreground">
                 支持占位符：{'{z}'}、{'{x}'}、{'{y}'}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="sort_order">排序</Label>
+              <Input
+                id="sort_order"
+                type="number"
+                value={formData.sort_order}
+                onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
+              />
+              <p className="text-xs text-muted-foreground">
+                数字越小越靠前
               </p>
             </div>
             <div className="flex gap-4">

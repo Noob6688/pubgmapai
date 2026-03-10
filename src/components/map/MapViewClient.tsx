@@ -152,7 +152,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           .from('maps')
           .select('*')
           .eq('is_active', true)
-          .order('name')
+          .order('sort_order', { ascending: true })
 
         if (!mapsError && mapsData) {
           setMaps(mapsData)
