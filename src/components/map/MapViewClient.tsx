@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { MapType, Map, Recommendation, Marker, MarkerType } from '@/types/database'
 import LeafletMap from '@/components/map/LeafletMap'
@@ -94,6 +94,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   const [logoUrl, setLogoUrl] = useState<string>('https://r2.pubgmaptile.top/public/logo.png')
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
+  const dataLoadedRef = useRef(false)
 
   const associatedMarkerTypes = useMemo(() => {
     return allMarkerTypes.filter(mt => associatedMarkerTypeIds.includes(mt.id))
@@ -112,6 +113,9 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   }, [selectedMap, selectedMapType])
 
   useEffect(() => {
+    if (dataLoadedRef.current) return
+    dataLoadedRef.current = true
+
     async function fetchData() {
       try {
         const [
