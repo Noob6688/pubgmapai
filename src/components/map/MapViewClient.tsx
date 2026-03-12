@@ -93,6 +93,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   const [selectedMap, setSelectedMap] = useState<Map | null>(null)
   const [logoUrl, setLogoUrl] = useState<string>('https://r2.pubgmaptile.top/public/logo.png')
   const [loading, setLoading] = useState(true)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const supabase = createClient()
   const dataLoadedRef = useRef(false)
 
@@ -229,8 +230,13 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
     <>
       <style>{scrollbarStyles}</style>
       <div className="flex h-screen w-full overflow-hidden">
-      <aside className="flex w-[220px] flex-col overflow-y-auto border-r border-slate-800 bg-[#0d1b2a] p-4 custom-scrollbar">
-        <div className="mb-4 flex flex-col items-center">
+        <aside 
+          className={`flex flex-col overflow-hidden border-r border-slate-800 bg-[#0d1b2a] transition-all duration-300 ease-in-out ${
+            sidebarCollapsed ? 'w-0' : 'w-[220px]'
+          }`}
+        >
+          <div className={`flex flex-col overflow-y-auto p-4 custom-scrollbar ${sidebarCollapsed ? 'hidden' : ''}`}>
+            <div className="mb-4 flex flex-col items-center">
           <div className="mb-2 h-16 w-16 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)]">
             <img
               src={logoUrl}
@@ -363,9 +369,28 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
             </div>
           </div>
         )}
-      </aside>
+        </div>
+        </aside>
 
-      <main className="relative flex-1">
+        <button
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          className={`absolute top-1/2 z-[1000] flex h-8 w-4 -translate-y-1/2 items-center justify-center rounded-r-full bg-slate-700 text-white transition-all duration-300 hover:bg-slate-600 ${
+            sidebarCollapsed 
+              ? 'left-0' 
+              : 'left-[220px]'
+          }`}
+        >
+          <svg 
+            className={`h-4 w-4 translate-x-1.25 transition-transform duration-300 ${sidebarCollapsed ? 'rotate-180' : ''}`} 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <main className="relative flex-1">
         <div className="absolute right-4 top-4 z-[1000]">
           <Select
             value={selectedMap?.id || ''}
