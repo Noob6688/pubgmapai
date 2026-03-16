@@ -256,8 +256,11 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
 
   return (
     <>
-      <style>{scrollbarStyles}</style>
-      <div className="flex h-[100dvh] w-full overflow-hidden">
+      <style>{`
+        ${scrollbarStyles}
+        .no-overscroll { overscroll-behavior-y: contain; }
+      `}</style>
+      <div className="flex h-[100dvh] w-full overflow-hidden no-overscroll">
         <aside 
           className={`hidden md:flex flex-col overflow-hidden border-r border-slate-800 bg-[#0d1b2a] transition-all duration-300 ease-in-out ${
             sidebarCollapsed ? 'w-0' : 'w-[220px]'
@@ -508,7 +511,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           onClick={() => setMobileDrawerOpen(false)}
         />
         <div 
-          className={`absolute bottom-0 left-0 right-0 max-h-[65vh] flex flex-col overflow-hidden rounded-t-3xl bg-[#0d1b2a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-75 ${mobileDrawerOpen ? '' : 'translate-y-full opacity-80 scale-95'}`}
+          className={`absolute bottom-0 left-0 right-0 h-[65vh] flex flex-col rounded-t-3xl bg-[#0d1b2a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-75 ${mobileDrawerOpen ? 'translate-y-0' : 'translate-y-full opacity-80 scale-95'}`}
           style={{ 
             transform: mobileDrawerOpen && drawerTranslateY > 0 ? `translateY(${drawerTranslateY}px)` : undefined,
             transition: drawerTranslateY > 0 ? 'none' : undefined
@@ -517,8 +520,10 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
             const touch = e.touches[0]
             touchStartY.current = touch.clientY
           }}
-          onTouchMove={(e) => {
+          onTouchMoveCapture={(e) => {
             e.preventDefault()
+          }}
+          onTouchMove={(e) => {
             const touch = e.touches[0]
             const diff = touch.clientY - touchStartY.current
             if (diff > 0) {
@@ -538,7 +543,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
             >
               <div className="w-16 h-1.5 rounded-full bg-slate-600" />
             </div>
-            <div className="flex flex-col overflow-y-auto p-4 pb-8" style={{ paddingBottom: 'env(safe-area-inset-bottom, 20px)' }}>
+            <div className="flex-1 flex flex-col overflow-y-auto p-4" style={{ paddingBottom: 'env(safe-area-inset-bottom, 20px)' }}>
               <div className="mb-4 flex flex-col items-center">
                 <div className="mb-2 h-16 w-16 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                   <img src={logoUrl} alt="Logo" className="h-full w-full object-cover" />
