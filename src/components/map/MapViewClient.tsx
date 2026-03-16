@@ -245,7 +245,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#151922]">
+      <div className="flex h-[100dvh] w-full items-center justify-center bg-[#151922]">
         <div className="flex flex-col items-center gap-4">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-700 border-t-blue-500"></div>
           <p className="text-gray-400">加载中...</p>
@@ -257,7 +257,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   return (
     <>
       <style>{scrollbarStyles}</style>
-      <div className="flex h-screen w-full overflow-hidden">
+      <div className="flex h-[100dvh] w-full overflow-hidden">
         <aside 
           className={`hidden md:flex flex-col overflow-hidden border-r border-slate-800 bg-[#0d1b2a] transition-all duration-300 ease-in-out ${
             sidebarCollapsed ? 'w-0' : 'w-[220px]'
@@ -461,9 +461,10 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
         {/* Mobile Drawer Toggle Button */}
         <button
           onClick={() => setMobileDrawerOpen(true)}
-          className="md:hidden absolute bottom-4 right-4 z-[500] flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500 text-white shadow-lg"
+          className="md:hidden fixed bottom-6 right-4 z-[500] flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500 text-white shadow-lg active:scale-95 transition-transform"
+          style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -507,7 +508,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           onClick={() => setMobileDrawerOpen(false)}
         />
         <div 
-          className={`absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-hidden rounded-t-3xl bg-[#0d1b2a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-75 ${mobileDrawerOpen ? '' : 'translate-y-full opacity-80 scale-95'}`}
+          className={`absolute bottom-0 left-0 right-0 max-h-[65vh] flex flex-col overflow-hidden rounded-t-3xl bg-[#0d1b2a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-75 ${mobileDrawerOpen ? '' : 'translate-y-full opacity-80 scale-95'}`}
           style={{ 
             transform: mobileDrawerOpen && drawerTranslateY > 0 ? `translateY(${drawerTranslateY}px)` : undefined,
             transition: drawerTranslateY > 0 ? 'none' : undefined
@@ -517,6 +518,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
             touchStartY.current = touch.clientY
           }}
           onTouchMove={(e) => {
+            e.preventDefault()
             const touch = e.touches[0]
             const diff = touch.clientY - touchStartY.current
             if (diff > 0) {
@@ -536,7 +538,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
             >
               <div className="w-16 h-1.5 rounded-full bg-slate-600" />
             </div>
-            <div className="flex flex-col overflow-y-auto p-4 pb-8">
+            <div className="flex flex-col overflow-y-auto p-4 pb-8" style={{ paddingBottom: 'env(safe-area-inset-bottom, 20px)' }}>
               <div className="mb-4 flex flex-col items-center">
                 <div className="mb-2 h-16 w-16 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                   <img src={logoUrl} alt="Logo" className="h-full w-full object-cover" />
