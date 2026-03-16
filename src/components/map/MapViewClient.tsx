@@ -94,6 +94,8 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   const [logoUrl, setLogoUrl] = useState<string>('https://r2.pubgmaptile.top/public/logo.png')
   const [loading, setLoading] = useState(true)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [watermarkEnabled, setWatermarkEnabled] = useState(false)
+  const [watermarkText, setWatermarkText] = useState('')
   const supabase = createClient()
   const dataLoadedRef = useRef(false)
 
@@ -124,14 +126,20 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           mapTypesResult,
           markerTypesResult,
           mapsResult,
+          watermarkEnabledData,
+          watermarkTextData,
         ] = await Promise.all([
           fetchSetting(supabase, 'logo_url'),
           supabase.from('map_types').select('*').eq('is_active', true).order('sort_order'),
           supabase.from('marker_types').select('*').eq('is_active', true).order('sort_order'),
           supabase.from('maps').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
+          fetchSetting(supabase, 'watermark_enabled'),
+          fetchSetting(supabase, 'watermark_text'),
         ])
 
         if (logoUrlData) setLogoUrl(logoUrlData)
+        if (watermarkEnabledData) setWatermarkEnabled(watermarkEnabledData === 'true')
+        if (watermarkTextData) setWatermarkText(watermarkTextData)
 
         const mapTypesData = mapTypesResult.data
         if (mapTypesData && mapTypesData.length > 0) {
@@ -308,37 +316,37 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
         <div className="mb-4 h-px w-full bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent"></div>
 
         <div className="mb-4">
-          <label className="mb-3 block text-sm font-medium text-slate-400">地图选择</label>
-          <Select
-            value={selectedMapType?.id || ''}
-            onValueChange={async (value) => {
-              const selected = mapTypes.find(m => m.id === value)
-              if (selected) {
-                const [markerTypeIds, { data: newMarkersData }] = await Promise.all([
-                  fetchMarkerTypeIdsByMapType(supabase, selected.id),
-                  supabase.from('markers').select('*, marker_type:marker_types(*)').eq('map_id', selected.id)
-                ])
-                
-                setSelectedMapType(selected)
-                setAssociatedMarkerTypeIds(markerTypeIds)
-                
-                const firstAssociated = allMarkerTypes.find(mt => markerTypeIds.includes(mt.id))
-                setSelectedMarkerTypeIds(firstAssociated ? [firstAssociated.id] : [])
-                setMarkers(newMarkersData || [])
-              }
-            }}
-          >
-            <SelectTrigger className="w-full border-2 border-[#f59e0b] bg-slate-800/80 text-white transition-colors hover:bg-slate-800 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-orange-400 shadow-none">
-              <SelectValue placeholder="选择地图" />
-            </SelectTrigger>
-            <SelectContent>
-              {mapTypes.map((mapType) => (
-                <SelectItem key={mapType.id} value={mapType.id}>
+          <label className="mb-2 block text-sm font-medium text-slate-400">地图选择</label>
+          <div className="flex flex-wrap gap-1">
+            {mapTypes.map((mapType) => {
+              const isSelected = selectedMapType?.id === mapType.id
+              return (
+                <button
+                  key={mapType.id}
+                  onClick={async () => {
+                    const [markerTypeIds, { data: newMarkersData }] = await Promise.all([
+                      fetchMarkerTypeIdsByMapType(supabase, mapType.id),
+                      supabase.from('markers').select('*, marker_type:marker_types(*)').eq('map_id', mapType.id)
+                    ])
+                    
+                    setSelectedMapType(mapType)
+                    setAssociatedMarkerTypeIds(markerTypeIds)
+                    
+                    const firstAssociated = allMarkerTypes.find(mt => markerTypeIds.includes(mt.id))
+                    setSelectedMarkerTypeIds(firstAssociated ? [firstAssociated.id] : [])
+                    setMarkers(newMarkersData || [])
+                  }}
+                  className={`rounded px-2 py-1 text-xs font-medium transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-yellow-500/30 text-yellow-400'
+                      : 'bg-slate-800/30 text-slate-400 hover:bg-slate-700 hover:text-white'
+                  }`}
+                >
                   {mapType.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         <div className="mt-auto h-px w-full bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent"></div>
@@ -391,35 +399,49 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
         </button>
 
         <main className="relative flex-1">
-        <div className="absolute right-4 top-4 z-[1000]">
-          <Select
-            value={selectedMap?.id || ''}
-            onValueChange={(value) => {
-              const selected = maps.find(m => m.id === value)
-              setSelectedMap(selected || null)
-            }}
-          >
-            <SelectTrigger className="w-[180px] bg-slate-800 border-slate-600 text-white shadow-lg text-sm focus:ring-0 focus:outline-none">
-              <SelectValue placeholder="选择切片" />
-            </SelectTrigger>
-            <SelectContent>
-              {maps.map((map) => (
-                <SelectItem key={map.id} value={map.id}>
-                  {map.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="absolute left-1/2 top-4 z-[500] flex -translate-x-1/2 gap-1">
+          {maps.map((map) => {
+            const isSelected = selectedMap?.id === map.id
+            return (
+              <button
+                key={map.id}
+                onClick={() => setSelectedMap(map)}
+                className={`rounded px-2 py-1 text-xs font-medium transition-all duration-200 ${
+                  isSelected
+                    ? 'bg-yellow-500/30 text-yellow-400'
+                    : 'bg-slate-800/60 text-slate-400 hover:bg-slate-700 hover:text-white'
+                }`}
+              >
+                {map.name}
+              </button>
+            )
+          })}
         </div>
 
         {currentTileUrl ? (
-          <div className="h-full w-full">
+          <div className="relative h-full w-full">
             <LeafletMap
               center={[-60, -90]}
               zoom={3}
               markers={filteredMarkers}
               map={{ tile_url: currentTileUrl }}
             />
+            {watermarkEnabled && watermarkText && (
+              <div className="pointer-events-none absolute inset-0 z-[400] overflow-hidden opacity-20">
+                <div 
+                  className="flex h-full w-full flex-wrap content-center justify-around gap-y-64 whitespace-nowrap"
+                  style={{
+                    transform: 'rotate(-30deg)',
+                    fontSize: '40px',
+                    color: 'white',
+                  }}
+                >
+                  {Array(50).fill(watermarkText).map((text, i) => (
+                    <span key={i} className="mx-24">{text}</span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[#151922]">

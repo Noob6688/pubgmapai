@@ -30,6 +30,11 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false)
   const [editingKey, setEditingKey] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
+  const [editDescription, setEditDescription] = useState('')
+  const [isCreating, setIsCreating] = useState(false)
+  const [newKey, setNewKey] = useState('')
+  const [newValue, setNewValue] = useState('')
+  const [newDescription, setNewDescription] = useState('')
   const dataLoadedRef = useRef(false)
 
   useEffect(() => {
@@ -90,6 +95,56 @@ export default function SettingsPage() {
   const handleCancel = () => {
     setEditingKey(null)
     setEditValue('')
+    setEditDescription('')
+  }
+
+  const handleCreate = async () => {
+    if (!newKey.trim()) return
+    
+    setSaving(true)
+    try {
+      const { error } = await supabase
+        .from('settings')
+        .insert({ 
+          key: newKey.trim(), 
+          value: newValue,
+          description: newDescription || null
+        })
+
+      if (error) throw error
+      
+      toast.success('设置已创建')
+      setIsCreating(false)
+      setNewKey('')
+      setNewValue('')
+      setNewDescription('')
+      loadData()
+    } catch (error: any) {
+      toast.error(error.message || '创建失败')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDelete = async (key: string) => {
+    if (!confirm(`确定要删除设置 "${key}" 吗？`)) return
+    
+    setSaving(true)
+    try {
+      const { error } = await supabase
+        .from('settings')
+        .delete()
+        .eq('key', key)
+
+      if (error) throw error
+      
+      toast.success('设置已删除')
+      loadData()
+    } catch (error: any) {
+      toast.error(error.message || '删除失败')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const handleCreateLogoSetting = async () => {
@@ -191,11 +246,57 @@ export default function SettingsPage() {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>基本设置</CardTitle>
-          <CardDescription>网站的基本配置信息</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>基本设置</CardTitle>
+            <CardDescription>网站的基本配置信息</CardDescription>
+          </div>
+          <Button onClick={() => setIsCreating(true)}>
+            新增设置
+          </Button>
         </CardHeader>
         <CardContent>
+          {isCreating && (
+            <div className="mb-4 rounded-lg border bg-slate-50 p-4 dark:bg-slate-900">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <Label>键</Label>
+                  <Input
+                    value={newKey}
+                    onChange={(e) => setNewKey(e.target.value)}
+                    placeholder="例如: watermark_enabled"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>值</Label>
+                  <Input
+                    value={newValue}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    placeholder="例如: true"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>描述</Label>
+                  <Input
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    placeholder="可选描述"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Button onClick={handleCreate} disabled={saving || !newKey.trim()}>
+                  {saving ? '创建中...' : '创建'}
+                </Button>
+                <Button variant="outline" onClick={() => setIsCreating(false)}>
+                  取消
+                </Button>
+              </div>
+            </div>
+          )}
           {loading ? (
             <p className="text-center text-muted-foreground">加载中...</p>
           ) : settings.length === 0 ? (
@@ -241,9 +342,14 @@ export default function SettingsPage() {
                           </Button>
                         </div>
                       ) : (
-                        <Button size="sm" variant="outline" onClick={() => handleEdit(setting)}>
-                          编辑
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline" onClick={() => handleEdit(setting)}>
+                            编辑
+                          </Button>
+                          <Button size="sm" variant="destructive" onClick={() => handleDelete(setting.key)}>
+                            删除
+                          </Button>
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>
