@@ -258,9 +258,10 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
     <>
       <style>{`
         ${scrollbarStyles}
-        .no-overscroll { overscroll-behavior-y: contain; }
+        body { overscroll-behavior-y: none; }
+        .mobile-drawer { overscroll-behavior-y: contain; }
       `}</style>
-      <div className="flex h-[100dvh] w-full overflow-hidden no-overscroll">
+      <div className="flex h-[100dvh] w-full overflow-hidden">
         <aside 
           className={`hidden md:flex flex-col overflow-hidden border-r border-slate-800 bg-[#0d1b2a] transition-all duration-300 ease-in-out ${
             sidebarCollapsed ? 'w-0' : 'w-[220px]'
@@ -511,39 +512,38 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           onClick={() => setMobileDrawerOpen(false)}
         />
         <div 
-          className={`absolute bottom-0 left-0 right-0 h-[65vh] flex flex-col rounded-t-3xl bg-[#0d1b2a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-75 ${mobileDrawerOpen ? 'translate-y-0' : 'translate-y-full opacity-80 scale-95'}`}
+          className={`absolute bottom-0 left-0 right-0 flex flex-col rounded-t-3xl bg-[#0d1b2a] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-300 mobile-drawer ${mobileDrawerOpen ? 'translate-y-0' : 'translate-y-full opacity-80 scale-95'}`}
           style={{ 
+            maxHeight: '85vh',
             transform: mobileDrawerOpen && drawerTranslateY > 0 ? `translateY(${drawerTranslateY}px)` : undefined,
-            transition: drawerTranslateY > 0 ? 'none' : undefined
-          }}
-          onTouchStart={(e) => {
-            const touch = e.touches[0]
-            touchStartY.current = touch.clientY
-          }}
-          onTouchMoveCapture={(e) => {
-            e.preventDefault()
-          }}
-          onTouchMove={(e) => {
-            const touch = e.touches[0]
-            const diff = touch.clientY - touchStartY.current
-            if (diff > 0) {
-              setDrawerTranslateY(diff)
-            }
-          }}
-          onTouchEnd={(e) => {
-            const threshold = drawerMaxHeight * 0.3
-            if (drawerTranslateY > threshold) {
-              setMobileDrawerOpen(false)
-            }
-            setDrawerTranslateY(0)
+            transition: drawerTranslateY > 0 ? 'none' : undefined,
+            paddingBottom: 'env(safe-area-inset-bottom, 20px)'
           }}
         >
             <div 
-              className="flex h-8 cursor-grab active:cursor-grabbing items-center justify-center"
+              className="flex h-8 shrink-0 cursor-grab active:cursor-grabbing items-center justify-center"
+              onTouchStart={(e) => {
+                const touch = e.touches[0]
+                touchStartY.current = touch.clientY
+              }}
+              onTouchMove={(e) => {
+                const touch = e.touches[0]
+                const diff = touch.clientY - touchStartY.current
+                if (diff > 0) {
+                  setDrawerTranslateY(diff)
+                }
+              }}
+              onTouchEnd={() => {
+                const threshold = drawerMaxHeight * 0.3
+                if (drawerTranslateY > threshold) {
+                  setMobileDrawerOpen(false)
+                }
+                setDrawerTranslateY(0)
+              }}
             >
               <div className="w-16 h-1.5 rounded-full bg-slate-600" />
             </div>
-            <div className="flex-1 flex flex-col overflow-y-auto p-4" style={{ paddingBottom: 'env(safe-area-inset-bottom, 20px)' }}>
+            <div className="flex-1 flex flex-col px-4 pb-4">
               <div className="mb-4 flex flex-col items-center">
                 <div className="mb-2 h-16 w-16 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                   <img src={logoUrl} alt="Logo" className="h-full w-full object-cover" />
