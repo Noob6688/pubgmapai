@@ -468,18 +468,16 @@ export async function uploadFile(
 
 ## 11. 部署
 
-### 11.1 部署平台
+### 11.1 部署规则
 
-使用 Cloudflare Workers + @opennextjs/cloudflare 部署 Next.js 应用。
+- **自动部署**: 推送代码到远程仓库后，Cloudflare Pages 会自动触发部署，无需手动执行 `pnpm run deploy`
+- **确认机制**: 每次代码修改后需要 push 时，必须先询问用户确认后再执行
 
 ### 11.2 部署命令
 
 ```bash
-# 本地预览
+# 本地预览（仅在需要本地测试时使用）
 pnpm run preview
-
-# 部署生产
-pnpm run deploy
 ```
 
 ### 11.3 配置文件

@@ -1,13 +1,35 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { Map, Crosshair, Target, Compass } from 'lucide-react'
+import HolographicMapCard from '@/components/home/HolographicMapCard'
+
+const MAPS = [
+  {
+    name: '艾伦格',
+    slug: 'Erangel',
+    secretCount: 15,
+    tileUrl: 'https://tile.nooblog.top/tile/Erangel/1/0/0.webp',
+  },
+  {
+    name: '泰戈',
+    slug: 'Taego',
+    secretCount: 12,
+    tileUrl: 'https://tile.nooblog.top/tile/Taego/1/0/0.webp',
+  },
+  {
+    name: '荣都',
+    slug: 'Rondo',
+    secretCount: 4,
+    tileUrl: 'https://tile.nooblog.top/tile/Rondo/1/0/0.webp',
+  },
+]
 
 export default function HomePage() {
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 })
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({
         x: (e.clientX / window.innerWidth) * 100,
@@ -18,116 +40,172 @@ export default function HomePage() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  return (
-    <div className="min-h-screen bg-[#151922] overflow-hidden relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/20 via-[#151922] to-[#151922]" />
-      
-      <div 
-        className="absolute w-[600px] h-[600px] rounded-full blur-3xl opacity-30"
-        style={{
-          background: 'radial-gradient(circle, rgba(249,115,22,0.4) 0%, transparent 70%)',
-          left: `${mousePos.x}%`,
-          top: `${mousePos.y}%`,
-          transform: 'translate(-50%, -50%)',
-          transition: 'left 0.3s ease-out, top 0.3s ease-out',
-        }}
-      />
+  const version = 'v2.0'
 
+  return (
+    <div className="min-h-screen bg-[#0a0a12] overflow-hidden relative">
+      <style>{`
+        @keyframes scan {
+          0% { top: 0%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+        .animate-scan {
+          animation: scan 3s linear infinite;
+        }
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+      `}</style>
+      
       <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
+        <div 
+          className="absolute w-[800px] h-[800px] rounded-full blur-[150px] opacity-20"
+          style={{
+            background: 'radial-gradient(circle, rgba(0,240,255,0.4) 0%, transparent 70%)',
+            left: `${mousePos.x}%`,
+            top: `${mousePos.y}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      </div>
+      
+      <div className="absolute inset-0">
+        {mounted && [...Array(30)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-orange-500/50 rounded-full animate-pulse"
+            className="absolute w-[2px] h-[2px] bg-cyan-400/50 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+              animation: `float ${4 + Math.random() * 4}s ease-in-out infinite`,
               animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
             }}
           />
         ))}
       </div>
-
-      <div className="absolute inset-0 opacity-10">
+      
+      <div className="absolute inset-0 opacity-5">
         <svg className="w-full h-full">
           <defs>
-            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#f97316" strokeWidth="0.5"/>
+            <pattern id="holo-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00f0ff" strokeWidth="0.5" opacity="0.3"/>
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
+          <rect width="100%" height="100%" fill="url(#holo-grid)" />
         </svg>
       </div>
 
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-        <div className="absolute top-8 left-8 flex items-center gap-2 text-orange-500/60">
-          <Compass className="w-5 h-5 animate-spin" style={{ animationDuration: '10s' }} />
-          <span className="text-sm font-mono tracking-widest">PUBG MAP</span>
-        </div>
-
-        <div className="absolute top-8 right-8 flex gap-4 text-orange-500/40 text-xs font-mono">
-          <span>LAT: {mousePos.y.toFixed(2)}</span>
-          <span>LNG: {mousePos.x.toFixed(2)}</span>
-        </div>
-
-        <div className="relative mb-8">
-          <div className="absolute -inset-4 bg-orange-500/20 blur-xl rounded-full animate-pulse" />
-          <div className="absolute -inset-8 bg-orange-500/10 blur-2xl rounded-full" />
-          <div className="relative w-32 h-32 flex items-center justify-center">
-            <div className="absolute inset-0 border-2 border-orange-500/30 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
-            <div className="absolute inset-4 border border-orange-500/50 rounded-full" />
-            <Target className="w-16 h-16 text-orange-500 relative z-10" />
+      <header className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-cyan-500/10">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg border border-cyan-500/50 flex items-center justify-center bg-cyan-500/10">
+            <svg className="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
           </div>
-        </div>
-
-        <h1 className="text-5xl md:text-7xl font-bold text-center mb-4 relative">
-          <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">
-            PUBG 地图
+          <span className="text-lg font-bold text-white tracking-wide">
+            PUBG <span className="text-cyan-400">TACTICAL</span> MAP
           </span>
-          <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-amber-500/20 blur-xl -z-10" />
-        </h1>
-
-        <p className="text-xl md:text-2xl text-orange-200/80 mb-2 text-center">
-          精准定位 战术制胜
-        </p>
-        <p className="text-sm text-orange-400/60 mb-12 text-center max-w-md">
-          实时战术地图 | 标记点位追踪 | 战术路线规划
-        </p>
-
-        <Link href="/map">
-          <button className="group relative px-12 py-4 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(249,115,22,0.5)]">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative flex items-center gap-3">
-              <Map className="w-5 h-5" />
-              <span className="text-lg font-semibold">进入地图</span>
-              <Crosshair className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
-            </div>
-          </button>
-        </Link>
-
-        <div className="mt-16 flex gap-8 text-orange-500/40">
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 border border-orange-500/30 rounded flex items-center justify-center">
-              <Crosshair className="w-6 h-6" />
-            </div>
-            <span className="text-xs">精准标记</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 border border-orange-500/30 rounded flex items-center justify-center">
-              <Target className="w-6 h-6" />
-            </div>
-            <span className="text-xs">实时追踪</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 border border-orange-500/30 rounded flex items-center justify-center">
-              <Compass className="w-6 h-6" />
-            </div>
-            <span className="text-xs">战术规划</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="px-3 py-1 rounded border border-cyan-500/30 bg-cyan-500/5">
+            <span className="text-xs font-mono text-cyan-400">{version}</span>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#151922] to-transparent" />
+      <main className="relative z-10 px-4 py-12 md:px-8 lg:px-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-block relative mb-4">
+              <div className="absolute -inset-4 bg-cyan-500/20 blur-xl rounded-full" />
+              <div className="relative">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full border-2 border-cyan-500/50 flex items-center justify-center bg-cyan-500/10">
+                  <svg className="w-10 h-10 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20" />
+                    <path d="M2 12h20" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-500 bg-clip-text text-transparent">
+                PUBG 全息战术地图
+              </span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-cyan-200/70 mb-2">
+              精准定位 · 战术制胜
+            </p>
+            
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-sm text-cyan-300/80">2026 赛季实时数据 · Patch 31.2</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+            {MAPS.map((map, index) => (
+              <div
+                key={map.slug}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <HolographicMapCard
+                  name={map.name}
+                  slug={map.slug}
+                  secretCount={map.secretCount}
+                  tileUrl={map.tileUrl}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#0a0a12]/80 border border-cyan-500/20 backdrop-blur-sm">
+              <svg className="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span className="text-sm text-cyan-300/70">
+                点击地图卡片进入交互模式
+              </span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer className="relative z-10 border-t border-cyan-500/10 py-4">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between text-xs text-cyan-500/40">
+          <div className="flex items-center gap-4">
+            <span>© 2026 PUBG Tactical Map</span>
+            <span className="hidden md:inline">|</span>
+            <span className="hidden md:inline">Data updated: 2026.03.17</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/50" />
+            <span>System Online</span>
+          </div>
+        </div>
+      </footer>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); opacity: 0.5; }
+          50% { transform: translateY(-20px); opacity: 1; }
+        }
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
     </div>
   )
 }
