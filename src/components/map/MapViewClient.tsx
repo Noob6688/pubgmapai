@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { MapType, Map, Recommendation, Marker, MarkerType } from '@/types/database'
 import LeafletMap from '@/components/map/LeafletMap'
 import { endWormholeTransition } from '@/components/home/BlackHoleLoading'
+import { useTranslation } from '@/i18n'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 import {
   Select,
   SelectContent,
@@ -83,6 +85,7 @@ interface MapViewClientProps {
 }
 
 export default function MapViewClient({ routeSlug }: MapViewClientProps) {
+  const { t, tMap, tMarkerType } = useTranslation()
   const [mapTypes, setMapTypes] = useState<MapType[]>([])
   const [maps, setMaps] = useState<Map[]>([])
   const [allMarkerTypes, setAllMarkerTypes] = useState<MarkerType[]>([])
@@ -276,13 +279,16 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
               className="h-full w-full object-cover"
             />
           </div>
+          <div className="mb-2">
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <div className="mb-4 h-px w-full bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent"></div>
 
         {associatedMarkerTypes.length > 0 && (
           <div className="mb-4">
-            <label className="mb-3 block text-sm font-medium text-slate-400">标记类型</label>
+            <label className="mb-3 block text-sm font-medium text-slate-400">{t('map.markerType')}</label>
             <div className="flex gap-3 overflow-x-auto pb-2 custom-scrollbar-x">
               {associatedMarkerTypes.map((markerType) => {
                 const isSelected = selectedMarkerTypeIds.includes(markerType.id)
@@ -303,7 +309,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                       {markerType.icon_url ? (
                         <img
                           src={markerType.icon_url}
-                          alt={markerType.name}
+                          alt={tMarkerType(markerType.name)}
                           className="h-6 w-6 object-contain"
                         />
                       ) : (
@@ -316,7 +322,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                     <span className={`text-xs font-medium transition-colors ${
                       isSelected ? 'text-orange-400' : 'text-slate-400 group-hover:text-slate-300'
                     }`}>
-                      {markerType.name}
+                      {tMarkerType(markerType.name)}
                     </span>
                     <input
                       type="checkbox"
@@ -340,7 +346,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
         <div className="mb-4 h-px w-full bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent"></div>
 
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-slate-400">地图选择</label>
+          <label className="mb-2 block text-sm font-medium text-slate-400">{t('map.mapSelection')}</label>
           <div className="flex flex-wrap gap-1">
             {mapTypes.map((mapType) => {
               const isSelected = selectedMapType?.id === mapType.id
@@ -366,7 +372,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                       : 'bg-slate-800/30 text-slate-400 hover:bg-slate-700 hover:text-white'
                   }`}
                 >
-                  {mapType.name}
+                  {tMap(mapType.name)}
                 </button>
               )
             })}
@@ -378,7 +384,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
         {recommendations.length > 0 && (
           <div className="mt-4">
             <label className="mb-3 block text-sm font-medium text-slate-400">
-              推荐站点
+              {t('map.recommendation')}
             </label>
             <div className="space-y-2">
               {recommendations.map((rec) => (
@@ -436,7 +442,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                     : 'bg-slate-800/60 text-slate-400 hover:bg-slate-700 hover:text-white'
                 }`}
               >
-                {map.name}
+                {tMap(map.name)}
               </button>
             )
           })}
@@ -456,7 +462,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                     : 'bg-slate-800/60 text-slate-400 hover:bg-slate-700 hover:text-white'
                 }`}
               >
-                {map.name}
+                {tMap(map.name)}
               </button>
             )
           })}
@@ -554,7 +560,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
 
               {associatedMarkerTypes.length > 0 && (
                 <div className="mb-4">
-                  <label className="mb-2 block text-sm font-medium text-slate-400">标记类型</label>
+                  <label className="mb-2 block text-sm font-medium text-slate-400">{t('map.markerType')}</label>
                   <div className="flex flex-wrap gap-2">
                     {associatedMarkerTypes.map((markerType) => {
                       const isSelected = selectedMarkerTypeIds.includes(markerType.id)
@@ -575,11 +581,11 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                           }`}
                         >
                           {markerType.icon_url ? (
-                            <img src={markerType.icon_url} alt={markerType.name} className="h-4 w-4 object-contain" />
+                            <img src={markerType.icon_url} alt={tMarkerType(markerType.name)} className="h-4 w-4 object-contain" />
                           ) : (
                             <div className="h-3 w-3 rounded-full" style={{ backgroundColor: markerType.color || '#f59e0b' }} />
                           )}
-                          <span>{markerType.name}</span>
+                          <span>{tMarkerType(markerType.name)}</span>
                         </button>
                       )
                     })}
@@ -590,7 +596,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
               <div className="mb-4 h-px w-full bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent"></div>
 
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-medium text-slate-400">地图选择</label>
+                <label className="mb-2 block text-sm font-medium text-slate-400">{t('map.mapSelection')}</label>
                 <div className="flex flex-wrap gap-2">
                   {mapTypes.map((mapType) => {
                     const isSelected = selectedMapType?.id === mapType.id
@@ -616,7 +622,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
                             : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700'
                         }`}
                       >
-                        {mapType.name}
+                        {tMap(mapType.name)}
                       </button>
                     )
                   })}

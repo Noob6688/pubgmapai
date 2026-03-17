@@ -1,0 +1,69 @@
+{
+  "common": {
+    "version": "v2.0",
+    "systemOnline": "System Online",
+    "dataUpdated": "Data updated: 2026.03.17"
+  },
+  "home": {
+    "title": "PUBG 战术地图",
+    "subtitle": "精准定位 · 战术制胜",
+    "seasonInfo": "2026 赛季实时数据 · Patch 31.2",
+    "clickToEnter": "点击地图卡片进入交互模式",
+    "tacticalMap": "TACTICAL MAP",
+    "online": "Online",
+    "secret": "SECRET",
+    "maps": {
+      "Erangel": "艾伦格",
+      "Taego": "泰戈",
+      "Rondo": "荣都"
+    }
+  },
+  "map": {
+    "markerType": "标记类型",
+    "mapSelection": "地图选择",
+    "recommendation": "推荐站点",
+    "selectMap": "选择地图",
+    "allTypes": "全部",
+    "maps": {
+      "Erangel": "艾伦格",
+      "Miramar": "米拉玛",
+      "Taego": "泰戈",
+      "Vikendi": "维寒迪",
+      "Rondo": "荣都",
+      "Deston": "蒂斯顿",
+      "艾伦格": "艾伦格",
+      "米拉玛": "米拉玛",
+      "泰戈": "泰戈",
+      "维寒迪": "维寒迪",
+      "荣都": "荣都",
+      "蒂斯顿": "蒂斯顿"
+    },
+    "markerTypes": {
+      "Secret": "密室",
+      "Safety Door": "安全门",
+      "Bear Cave": "熊洞",
+      "Car": "载具",
+      "Glider": "滑翔机",
+      "Gold": "金条",
+      "Crowbar Room": "撬棍房",
+      "Experimental Camp": "实验营地",
+      "密室": "密室",
+      "安全门": "安全门",
+      "熊洞": "熊洞",
+      "载具": "载具",
+      "滑翔机": "滑翔机",
+      "金条": "金条",
+      "撬棍房": "撬棍房",
+      "实验营地": "实验营地"
+    }
+  },
+  "blackHole": {
+    "entering": "正在穿越...",
+    "exiting": "即将到达"
+  },
+  "metadata": {
+    "title": "PUBG密室位置全解密 - 寻找艾伦格地图隐藏宝藏",
+    "description": "深入探索PUBG绝地求生，揭秘各大地图的秘密密室位置与攻略。从泰戈的隐秘军火库到帝斯顿的未知空间，获取最全密室坐标，学习高效解锁技巧，提升你的游戏策略与胜率，成为战场中的探秘高手。",
+    "openGraphTitle": "PUBG密室探险秘籍"
+  }
+}

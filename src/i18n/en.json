@@ -1,0 +1,69 @@
+{
+  "common": {
+    "version": "v2.0",
+    "systemOnline": "System Online",
+    "dataUpdated": "Data updated: 2026.03.17"
+  },
+  "home": {
+    "title": "PUBG Tactical Map",
+    "subtitle": "Precise Positioning · Tactical Victory",
+    "seasonInfo": "2026 Season Real-time Data · Patch 31.2",
+    "clickToEnter": "Click map card to enter interactive mode",
+    "tacticalMap": "TACTICAL MAP",
+    "online": "Online",
+    "secret": "SECRET",
+    "maps": {
+      "Erangel": "Erangel",
+      "Taego": "Taego",
+      "Rondo": "Rondo"
+    }
+  },
+  "map": {
+    "markerType": "Marker Type",
+    "mapSelection": "Map Selection",
+    "recommendation": "Recommended Spots",
+    "selectMap": "Select Map",
+    "allTypes": "All",
+    "maps": {
+      "Erangel": "Erangel",
+      "Miramar": "Miramar",
+      "Taego": "Taego",
+      "Vikendi": "Vikendi",
+      "Rondo": "Rondo",
+      "Deston": "Deston",
+      "艾伦格": "Erangel",
+      "米拉玛": "Miramar",
+      "泰戈": "Taego",
+      "维寒迪": "Vikendi",
+      "荣都": "Rondo",
+      "蒂斯顿": "Deston"
+    },
+    "markerTypes": {
+      "Secret": "Secret",
+      "Safety Door": "Safety Door",
+      "Bear Cave": "Bear Cave",
+      "Car": "Car",
+      "Glider": "Glider",
+      "Gold": "Gold",
+      "Crowbar Room": "Crowbar Room",
+      "Experimental Camp": "Experimental Camp",
+      "密室": "Secret",
+      "安全门": "Safety Door",
+      "熊洞": "Bear Cave",
+      "载具": "Car",
+      "滑翔机": "Glider",
+      "金条": "Gold",
+      "撬棍房": "Crowbar Room",
+      "实验营地": "Experimental Camp"
+    }
+  },
+  "blackHole": {
+    "entering": "Traversing...",
+    "exiting": "Arriving Soon"
+  },
+  "metadata": {
+    "title": "PUBG Secret Room Locations - Discover Erangel's Hidden Treasures",
+    "description": "Explore PUBG to uncover secret room locations and strategies across all maps. From Taego's secret armory to Deston's unknown spaces, get the most complete coordinates and learn efficient unlocking techniques to improve your game strategy and win rate.",
+    "openGraphTitle": "PUBG Secret Room Exploration Guide"
+  }
+}

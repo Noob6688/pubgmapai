@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import HolographicMapCard from '@/components/home/HolographicMapCard'
+import { useTranslation } from '@/i18n'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 
 const MAPS = [
   {
@@ -22,6 +24,7 @@ const MAPS = [
 ]
 
 export default function HomePage() {
+  const { t } = useTranslation()
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 })
   const [mounted, setMounted] = useState(false)
 
@@ -37,7 +40,7 @@ export default function HomePage() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  const version = 'v2.0'
+  const version = t('common.version')
 
   return (
     <div className="min-h-screen bg-[#0a0a12] overflow-hidden relative">
@@ -107,6 +110,7 @@ export default function HomePage() {
           </span>
         </div>
         <div className="flex items-center gap-4">
+          <LanguageSwitcher />
           <div className="px-3 py-1 rounded border border-cyan-500/30 bg-cyan-500/5">
             <span className="text-xs font-mono text-cyan-400">{version}</span>
           </div>
@@ -127,17 +131,17 @@ export default function HomePage() {
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-500 bg-clip-text text-transparent">
-                PUBG 战术地图
+                {t('home.title')}
               </span>
             </h1>
             
             <p className="text-lg md:text-xl text-cyan-200/70 mb-2">
-              精准定位 · 战术制胜
+              {t('home.subtitle')}
             </p>
             
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20">
               <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              <span className="text-sm text-cyan-300/80">2026 赛季实时数据 · Patch 31.2</span>
+              <span className="text-sm text-cyan-300/80">{t('home.seasonInfo')}</span>
             </div>
           </div>
 
@@ -149,7 +153,7 @@ export default function HomePage() {
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <HolographicMapCard
-                  name={map.name}
+                  name={t(`home.maps.${map.slug}`)}
                   slug={map.slug}
                   secretCount={map.secretCount}
                 />
@@ -165,7 +169,7 @@ export default function HomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               <span className="text-sm text-cyan-300/70">
-                点击地图卡片进入交互模式
+                {t('home.clickToEnter')}
               </span>
             </div>
           </div>
@@ -177,11 +181,11 @@ export default function HomePage() {
           <div className="flex items-center gap-4">
             <span>© 2026 PUBG Tactical Map</span>
             <span className="hidden md:inline">|</span>
-            <span className="hidden md:inline">Data updated: 2026.03.17</span>
+            <span className="hidden md:inline">{t('common.dataUpdated')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/50" />
-            <span>System Online</span>
+            <span>{t('common.systemOnline')}</span>
           </div>
         </div>
       </footer>

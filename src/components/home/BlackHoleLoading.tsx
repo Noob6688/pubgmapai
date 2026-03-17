@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { getPhase, startWormholeTransition, endWormholeTransition } from '@/lib/wormhole'
+import { useTranslation } from '@/i18n'
 
 export { startWormholeTransition, endWormholeTransition } from '@/lib/wormhole'
 
 export default function BlackHoleLoading() {
+  const { t } = useTranslation()
   const [phase, setPhase] = useState<'idle' | 'entering' | 'exiting'>('idle')
 
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function BlackHoleLoading() {
 
       <div className="absolute bottom-32">
         <p className="loading-text text-cyan-400 text-xl font-mono tracking-widest">
-          {phase === 'exiting' ? '即将到达' : '正在穿越...'}
+          {phase === 'exiting' ? t('blackHole.exiting') : t('blackHole.entering')}
         </p>
       </div>
     </div>

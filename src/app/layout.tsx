@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import BlackHoleLoading from '@/components/home/BlackHoleLoading'
+import { I18nProvider, getStaticTranslations } from '@/i18n'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -36,16 +37,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <meta name="baidu-site-verification" content="codeva-cdUD5IZkip" />
         <meta name="baidu-site-verification" content="codeva-xS6AgmmK5V" />
         <script async src="//js.users.51.la/21898489.js"></script>
       </head>
       <body className={inter.className}>
-        {children}
-        <BlackHoleLoading />
-        <Toaster />
+        <I18nProvider>
+          {children}
+          <BlackHoleLoading />
+          <Toaster />
+        </I18nProvider>
         <script async data-cfasync="false" src="https://pl28932388.effectivegatecpm.com/eb663e04881c7a3d583ed375e0e309fb/invoke.js"></script>
       </body>
     </html>

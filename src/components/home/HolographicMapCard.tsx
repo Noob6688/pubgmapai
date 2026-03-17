@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { startWormholeTransition } from '@/lib/wormhole'
+import { useTranslation } from '@/i18n'
 
 interface HolographicMapCardProps {
   name: string
@@ -13,6 +14,7 @@ interface HolographicMapCardProps {
 const TILE_BASE_URL = 'https://tile.nooblog.top/tile'
 
 export default function HolographicMapCard({ name, slug, secretCount }: HolographicMapCardProps) {
+  const { t } = useTranslation()
   const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const [rotateX, setRotateX] = useState(0)
@@ -51,7 +53,7 @@ export default function HolographicMapCard({ name, slug, secretCount }: Holograp
     startWormholeTransition()
     
     setTimeout(() => {
-      router.push(`/map/${slug}`)
+      router.push('/map')
     }, 800)
   }
 
@@ -92,12 +94,12 @@ export default function HolographicMapCard({ name, slug, secretCount }: Holograp
             
             <div className="absolute top-3 left-3 flex items-center gap-2 z-20">
               <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#00f0ff]" />
-              <span className="text-xs font-mono text-cyan-400/80 uppercase tracking-wider">Online</span>
+              <span className="text-xs font-mono text-cyan-400/80 uppercase tracking-wider">{t('home.online')}</span>
             </div>
             
             <div className="absolute top-3 right-3 z-20">
               <div className="px-2 py-1 rounded bg-cyan-500/20 border border-cyan-500/40">
-                <span className="text-xs font-mono text-cyan-300">SECRET: {secretCount}</span>
+                <span className="text-xs font-mono text-cyan-300">{t('home.secret')}: {secretCount}</span>
               </div>
             </div>
             
@@ -107,7 +109,7 @@ export default function HolographicMapCard({ name, slug, secretCount }: Holograp
                 {name}
               </h3>
               <div className="mt-2 flex items-center justify-between">
-                <span className="text-xs text-cyan-400/60 font-mono">TACTICAL MAP</span>
+                <span className="text-xs text-cyan-400/60 font-mono">{t('home.tacticalMap')}</span>
                 <div className="w-8 h-8 rounded-full border border-cyan-500/50 flex items-center justify-center group-hover:bg-cyan-500/20 group-hover:border-cyan-400 transition-all duration-300">
                   <svg className="w-4 h-4 text-cyan-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
