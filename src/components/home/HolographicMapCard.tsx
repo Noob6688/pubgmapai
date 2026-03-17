@@ -52,7 +52,7 @@ export default function HolographicMapCard({ name, slug, secretCount }: Holograp
     
     setTimeout(() => {
       router.push(`/map/${slug}`)
-    }, 1500)
+    }, 800)
   }
 
   return (

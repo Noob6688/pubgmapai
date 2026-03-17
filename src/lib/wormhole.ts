@@ -1,6 +1,6 @@
 let transitionStartTime = 0
 let forceExit = false
-const ENTERING_DURATION = 1500
+const ENTERING_DURATION = 800
 const MAX_KEEP_ALIVE = 10000
 const EXIT_DELAY = 200
 

@@ -1,0 +1,27 @@
+# 允许所有传统搜索引擎抓取
+User-agent: *
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+# 针对 OpenAI (ChatGPT/SearchGPT) 的优化
+User-agent: GPTBot
+Allow: /llms.txt
+Allow: /map
+Allow: /
+
+# 针对字节跳动 (豆包/抖音 AI) 的优化
+User-agent: ByteDanceSpider
+Allow: /llms.txt
+Allow: /
+
+# 针对 Google AI (Gemini/Google Search) 的优化
+User-agent: Google-Extended
+Allow: /llms.txt
+
+# 屏蔽不必要的后端或搜索参数页面，节省爬虫配额
+Disallow: /admin
+
+# 引导爬虫发现你的 GEO 说明书 (虽然不是标准但很多 AI 爬虫会识别)
+Sitemap: https://pubgmap.top/llms.txt
+Sitemap: https://pubgmap.top/sitemap.xml
