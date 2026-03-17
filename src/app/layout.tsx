@@ -46,6 +46,7 @@ export default function RootLayout({
         {children}
         <BlackHoleLoading />
         <Toaster />
+        <script async data-cfasync="false" src="https://pl28932388.effectivegatecpm.com/eb663e04881c7a3d583ed375e0e309fb/invoke.js"></script>
       </body>
     </html>
   )
