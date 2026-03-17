@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { MapType, Map, Recommendation, Marker, MarkerType } from '@/types/database'
 import LeafletMap from '@/components/map/LeafletMap'
+import { endWormholeTransition } from '@/components/home/BlackHoleLoading'
 import {
   Select,
   SelectContent,
@@ -243,15 +244,14 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
     fetchData()
   }, [supabase, routeSlug])
 
+  useEffect(() => {
+    if (!loading) {
+      endWormholeTransition()
+    }
+  }, [loading])
+
   if (loading) {
-    return (
-      <div className="flex h-[100dvh] w-full items-center justify-center bg-[#151922]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-700 border-t-blue-500"></div>
-          <p className="text-gray-400">加载中...</p>
-        </div>
-      </div>
-    )
+    return <div className="flex h-[100dvh] w-full bg-[#151922]" />
   }
 
   return (

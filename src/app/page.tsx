@@ -8,19 +8,16 @@ const MAPS = [
     name: '艾伦格',
     slug: 'Erangel',
     secretCount: 15,
-    tileUrl: 'https://tile.nooblog.top/tile/Erangel/1/0/0.webp',
   },
   {
     name: '泰戈',
     slug: 'Taego',
     secretCount: 12,
-    tileUrl: 'https://tile.nooblog.top/tile/Taego/1/0/0.webp',
   },
   {
     name: '荣都',
     slug: 'Rondo',
     secretCount: 4,
-    tileUrl: 'https://tile.nooblog.top/tile/Rondo/1/0/0.webp',
   },
 ]
 
@@ -122,19 +119,15 @@ export default function HomePage() {
             <div className="inline-block relative mb-4">
               <div className="absolute -inset-4 bg-cyan-500/20 blur-xl rounded-full" />
               <div className="relative">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full border-2 border-cyan-500/50 flex items-center justify-center bg-cyan-500/10">
-                  <svg className="w-10 h-10 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20" />
-                    <path d="M2 12h20" />
-                  </svg>
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center bg-cyan-500/10 overflow-hidden">
+                  <img src="https://r2.pubgmaptile.top/public/logo.png" alt="Logo" className="w-full h-full object-cover" />
                 </div>
               </div>
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               <span className="bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-500 bg-clip-text text-transparent">
-                PUBG 全息战术地图
+                PUBG 战术地图
               </span>
             </h1>
             
@@ -159,7 +152,6 @@ export default function HomePage() {
                   name={map.name}
                   slug={map.slug}
                   secretCount={map.secretCount}
-                  tileUrl={map.tileUrl}
                 />
               </div>
             ))}
