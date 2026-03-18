@@ -1,3 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /map
+Disallow: /admin
+
 # pubgmap.top - PUBG 全地图交互式战术指南
 > 2026 赛季实时数据 (Patch 31.2)：提供精准的资源、载具及地形战略点位。
 
