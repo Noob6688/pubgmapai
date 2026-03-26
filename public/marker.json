@@ -11,7 +11,6 @@
       "type": "secret_room",
       "keyRequired": false,
       "entrance": "蓝色地板盖板",
-      "resourceLevel": "airdrop",
       "tactics": "单排落地优先搜，5分钟满配"
     },
     {
@@ -22,7 +21,6 @@
       "type": "secret_room",
       "keyRequired": false,
       "entrance": "小斜坡踏板",
-      "resourceLevel": "high+egg",
       "tactics": "需破坏踏板进入，注意周围蹲守敌人"
     }
 

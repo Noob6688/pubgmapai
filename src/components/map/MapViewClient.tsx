@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { MapType, Map, Recommendation, Marker, MarkerType } from '@/types/database'
 import LeafletMap from '@/components/map/LeafletMap'
-import { endWormholeTransition } from '@/components/home/BlackHoleLoading'
+import { endWormholeTransition, startWormholeTransition } from '@/components/home/BlackHoleLoading'
 import { useTranslation } from '@/i18n'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 import {
@@ -102,6 +102,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
   const [isMobile, setIsMobile] = useState(false)
   const [watermarkEnabled, setWatermarkEnabled] = useState(false)
   const [watermarkText, setWatermarkText] = useState('')
+  const [watermarkGap, setWatermarkGap] = useState(256)
   const supabase = createClient()
   const dataLoadedRef = useRef(false)
   const touchStartY = useRef(0)
@@ -152,6 +153,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           mapsResult,
           watermarkEnabledData,
           watermarkTextData,
+          watermarkGapData,
         ] = await Promise.all([
           fetchSetting(supabase, 'logo_url'),
           supabase.from('map_types').select('*').eq('is_active', true).order('sort_order'),
@@ -159,11 +161,13 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
           supabase.from('maps').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
           fetchSetting(supabase, 'watermark_enabled'),
           fetchSetting(supabase, 'watermark_text'),
+          fetchSetting(supabase, 'watermark_gap'),
         ])
 
         if (logoUrlData) setLogoUrl(logoUrlData)
         if (watermarkEnabledData) setWatermarkEnabled(watermarkEnabledData === 'true')
         if (watermarkTextData) setWatermarkText(watermarkTextData)
+        if (watermarkGapData) setWatermarkGap(parseInt(watermarkGapData) || 256)
 
         const mapTypesData = mapTypesResult.data
         if (mapTypesData && mapTypesData.length > 0) {
@@ -253,8 +257,23 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
     }
   }, [loading])
 
+  useEffect(() => {
+    if (!routeSlug) {
+      startWormholeTransition()
+    }
+  }, [routeSlug])
+
   if (loading) {
-    return <div className="flex h-[100dvh] w-full bg-[#151922]" />
+    return (
+      <div className="flex h-[100dvh] w-full overflow-hidden">
+        <aside className="hidden md:flex flex-col w-[220px] bg-[#0d1b2a] border-r border-slate-800 p-4">
+          <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-slate-800 animate-pulse" />
+          <div className="h-4 w-3/4 mx-auto mb-2 bg-slate-800 rounded animate-pulse" />
+          <div className="h-4 w-1/2 mx-auto bg-slate-800 rounded animate-pulse" />
+        </aside>
+        <div className="flex-1 bg-[#151922] animate-pulse" />
+      </div>
+    )
   }
 
   return (
@@ -490,11 +509,12 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
             {watermarkEnabled && watermarkText && (
               <div className="pointer-events-none absolute inset-0 z-[400] overflow-hidden opacity-20">
                 <div 
-                  className="flex h-full w-full flex-wrap content-center justify-around gap-y-64 whitespace-nowrap"
+                  className="flex h-full w-full flex-wrap content-center justify-around whitespace-nowrap"
                   style={{
                     transform: 'rotate(-30deg)',
                     fontSize: '40px',
                     color: 'white',
+                    gap: `${watermarkGap}px`,
                   }}
                 >
                   {Array(50).fill(watermarkText).map((text, i) => (
