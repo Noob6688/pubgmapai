@@ -7,6 +7,7 @@ import LeafletMap from '@/components/map/LeafletMap'
 import { endWormholeTransition, startWormholeTransition } from '@/components/home/BlackHoleLoading'
 import { useTranslation } from '@/i18n'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
+import TreasurePopup from './TreasurePopup'
 import {
   Select,
   SelectContent,
@@ -283,6 +284,7 @@ export default function MapViewClient({ routeSlug }: MapViewClientProps) {
         body { overscroll-behavior-y: none; }
         .mobile-drawer { overscroll-behavior-y: contain; }
       `}</style>
+      <TreasurePopup />
       <div className="flex h-[100dvh] w-full overflow-hidden">
         <aside 
           className={`hidden md:flex flex-col overflow-hidden border-r border-slate-800 bg-[#0d1b2a] transition-all duration-300 ease-in-out ${
