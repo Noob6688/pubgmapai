@@ -66,5 +66,14 @@
     "title": "PUBG Secret Room Locations - Discover Erangel's Hidden Treasures",
     "description": "Explore PUBG to uncover secret room locations and strategies across all maps. From Taego's secret armory to Deston's unknown spaces, get the most complete coordinates and learn efficient unlocking techniques to improve your game strategy and win rate.",
     "openGraphTitle": "PUBG Secret Room Exploration Guide"
+  },
+  "games": {
+    "title": "Casual Games",
+    "loading": "Loading...",
+    "noMoreGames": "No more games",
+    "noGames": "No games available",
+    "gameNotFound": "Game not found",
+    "backToList": "Back to games",
+    "gameIntro": "Game Introduction"
   }
 }

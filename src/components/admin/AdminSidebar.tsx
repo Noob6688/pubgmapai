@@ -12,6 +12,7 @@ import {
   LogOut,
   User as UserIcon,
   Link2,
+  Gamepad2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -70,6 +71,11 @@ const sidebarItems = [
     title: '路由推荐关联',
     href: '/admin/route-recommendations',
     icon: Link2,
+  },
+  {
+    title: '游戏管理',
+    href: '/admin/games',
+    icon: Gamepad2,
   },
   {
     title: '系统设置',

@@ -162,3 +162,23 @@ ON CONFLICT (slug) DO NOTHING;
 -- 5. 如果 markers 表已存在，需要手动修改外键约束：
 --    ALTER TABLE markers DROP CONSTRAINT IF EXISTS markers_map_id_fkey;
 --    ALTER TABLE markers ADD CONSTRAINT markers_map_id_fkey FOREIGN KEY (map_id) REFERENCES map_types(id) ON DELETE CASCADE;
+
+-- ============================================
+-- 9. 游戏表 (games)
+-- ============================================
+CREATE TABLE IF NOT EXISTS games (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  title text NOT NULL,
+  description text,
+  url text NOT NULL,
+  thumb text,
+  width text DEFAULT '100%',
+  height text DEFAULT '480px',
+  color text DEFAULT '#3f007e',
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE games ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public games are viewable" ON games FOR SELECT USING (true);
+CREATE POLICY "Authenticated can manage games" ON games FOR ALL USING (auth.role() = 'authenticated');

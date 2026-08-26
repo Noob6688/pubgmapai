@@ -97,3 +97,16 @@ export interface RouteRecommendation {
   created_at: string
   recommendation?: Recommendation
 }
+
+export interface Game {
+  id: string
+  title: string
+  description: string | null
+  url: string
+  thumb: string | null
+  width: string
+  height: string
+  color: string
+  created_at: string
+  updated_at: string
+}

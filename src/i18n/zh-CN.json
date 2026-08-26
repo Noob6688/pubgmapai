@@ -66,5 +66,14 @@
     "title": "PUBG密室位置全解密 - 寻找艾伦格地图隐藏宝藏",
     "description": "深入探索PUBG绝地求生，揭秘各大地图的秘密密室位置与攻略。从泰戈的隐秘军火库到帝斯顿的未知空间，获取最全密室坐标，学习高效解锁技巧，提升你的游戏策略与胜率，成为战场中的探秘高手。",
     "openGraphTitle": "PUBG密室探险秘籍"
+  },
+  "games": {
+    "title": "休闲小游戏",
+    "loading": "加载中...",
+    "noMoreGames": "没有更多游戏了",
+    "noGames": "暂无可用游戏",
+    "gameNotFound": "游戏不存在",
+    "backToList": "返回游戏列表",
+    "gameIntro": "游戏介绍"
   }
 }
