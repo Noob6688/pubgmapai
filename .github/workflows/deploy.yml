@@ -14,18 +14,21 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.34.9
+          cache: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+          node-version: '22'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Create wrangler.toml
         run: |
@@ -53,7 +56,6 @@ jobs:
 
       - name: Build and Deploy
         run: |
-          pnpm add -D @opennextjs/cloudflare wrangler
           npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion
           npx opennextjs-cloudflare deploy
         env:
